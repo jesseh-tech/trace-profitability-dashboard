@@ -126,6 +126,31 @@
   .unmatched-list{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;}
   .unmatched-chip{background:rgba(210,153,34,.12);color:var(--yellow);border-radius:4px;padding:2px 8px;font-size:11px;font-family:'Barlow Condensed',sans-serif;}
 
+  /* HELP PANEL */
+  .help-bar{background:var(--surface);border:1px solid var(--border);border-radius:8px;margin-bottom:16px;overflow:hidden;}
+  .help-bar-header{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;cursor:pointer;user-select:none;}
+  .help-bar-header:hover{background:var(--surface2);}
+  .help-bar-title{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13px;letter-spacing:1px;text-transform:uppercase;color:var(--accent);}
+  .help-bar-body{padding:0 20px 20px;display:none;border-top:1px solid var(--border);}
+  .help-bar-body.open{display:block;}
+  .help-step{display:flex;gap:14px;margin-bottom:16px;padding-top:16px;}
+  .help-num{flex-shrink:0;width:28px;height:28px;border-radius:50%;background:var(--accent);color:#000;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:14px;display:flex;align-items:center;justify-content:center;}
+  .help-step-body h4{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13px;color:var(--text);margin-bottom:3px;}
+  .help-step-body p{color:var(--muted);font-size:12px;line-height:1.6;}
+  .help-step-body code{background:var(--subtle);color:var(--accent);padding:1px 5px;border-radius:3px;font-size:11px;}
+  .help-cols{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:8px;}
+  .help-section-title{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--accent);margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border);}
+
+  /* JOB CODE MAP PANEL */
+  .jobmap-panel{background:rgba(63,185,80,.05);border:2px solid rgba(63,185,80,.3);border-radius:8px;padding:18px 20px;margin-top:16px;}
+  .jobmap-panel-title{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:14px;letter-spacing:1px;text-transform:uppercase;color:var(--green);margin-bottom:4px;}
+  .jobmap-panel-sub{color:var(--muted);font-size:12px;margin-bottom:14px;line-height:1.6;}
+  .jobmap-actions{display:flex;align-items:center;gap:16px;flex-wrap:wrap;}
+  .jobmap-upload-zone{border:2px dashed rgba(63,185,80,.4);border-radius:6px;padding:14px 20px;text-align:center;cursor:pointer;transition:all .2s;position:relative;flex:0 0 220px;}
+  .jobmap-upload-zone:hover,.jobmap-upload-zone.drag-over{border-color:var(--green);background:rgba(63,185,80,.08);}
+  .jobmap-upload-zone.loaded{border-color:var(--green);background:rgba(63,185,80,.08);}
+  .jobmap-upload-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+
   @media(max-width:900px){
     .kpi-row{grid-template-columns:repeat(2,1fr);}
     .import-grid{grid-template-columns:1fr;}
@@ -149,9 +174,94 @@
 
 <div class="container">
 
+  <!-- HOW TO USE — HELP PANEL -->
+  <div class="help-bar">
+    <div class="help-bar-header" onclick="toggleHelp()">
+      <div class="help-bar-title">📖 How to Use This Dashboard <span style="font-size:11px;font-weight:400;color:var(--muted);margin-left:8px;">— Click to expand</span></div>
+      <div id="help-chevron" style="color:var(--muted);font-size:16px;">▼</div>
+    </div>
+    <div class="help-bar-body" id="help-body">
+      <div class="help-cols">
+        <div>
+          <div class="help-section-title">📥 Step-by-Step: Loading Data Each Month</div>
+          <div class="help-step">
+            <div class="help-num">1</div>
+            <div class="help-step-body">
+              <h4>Export from Paycom</h4>
+              <p>Log into Paycom → Reports → <strong>Labor Allocation by Job</strong>. Set the date range to the month you want. Export as <code>.xlsx</code>. This file covers both Trace and CC&E — one export handles both.</p>
+            </div>
+          </div>
+          <div class="help-step">
+            <div class="help-num">2</div>
+            <div class="help-step-body">
+              <h4>Export from QuickBooks — Trace</h4>
+              <p>In QuickBooks Online for Trace LLC → Reports → <strong>Sales by Location</strong> (or Sales Transactions). Filter by the same date range. Export as <code>.xlsx</code> or <code>.csv</code>.</p>
+            </div>
+          </div>
+          <div class="help-step">
+            <div class="help-num">3</div>
+            <div class="help-step-body">
+              <h4>Export from QuickBooks — CC&E</h4>
+              <p>In QuickBooks Online for CC&E → Reports → <strong>Project Costs Detail</strong>. Same date range. Export as <code>.xlsx</code> or <code>.csv</code>.</p>
+            </div>
+          </div>
+          <div class="help-step">
+            <div class="help-num">4</div>
+            <div class="help-step-body">
+              <h4>Upload all three files</h4>
+              <p>Drag each file into its matching drop zone in the <strong>Data Import</strong> section below. The dashboard processes everything automatically — no formatting required.</p>
+            </div>
+          </div>
+          <div class="help-step">
+            <div class="help-num">5</div>
+            <div class="help-step-body">
+              <h4>Check for unmatched codes</h4>
+              <p>If a yellow warning appears, some labor hours couldn't be linked to a job. Use the <strong>Job Code Map</strong> section below to download the template, fill in the missing links, and re-upload. This is optional but improves accuracy.</p>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="help-section-title">📊 Reading the Dashboard</div>
+          <div class="help-step">
+            <div class="help-num" style="background:var(--green)">✓</div>
+            <div class="help-step-body">
+              <h4>KPI Cards (top row)</h4>
+              <p>Shows total revenue, labor cost, all-in costs, gross profit, and median job margin for the selected company tab. Switch between <strong>Trace</strong>, <strong>CC&E</strong>, and <strong>Combined</strong> using the tabs.</p>
+            </div>
+          </div>
+          <div class="help-step">
+            <div class="help-num" style="background:var(--green)">✓</div>
+            <div class="help-step-body">
+              <h4>Job Table</h4>
+              <p>Every row is a job. Click any row to expand the full cost breakdown — labor, materials, overhead, and employee-level detail from Paycom. Use the filters to sort by margin, revenue, or find a specific job.</p>
+            </div>
+          </div>
+          <div class="help-step">
+            <div class="help-num" style="background:var(--green)">✓</div>
+            <div class="help-step-body">
+              <h4>Margin color codes</h4>
+              <p><span style="color:var(--green);font-weight:700;">Green ≥ 20%</span> — healthy. <span style="color:var(--yellow);font-weight:700;">Yellow 5–20%</span> — watch it. <span style="color:var(--red);font-weight:700;">Red &lt; 5%</span> — needs attention.</p>
+            </div>
+          </div>
+          <div class="help-step">
+            <div class="help-num" style="background:var(--green)">✓</div>
+            <div class="help-step-body">
+              <h4>Export Report</h4>
+              <p>Click the <strong>Export Report</strong> button in the top right to download the current view as a <code>.csv</code> file. Open in Excel for further analysis or to share with your accountant.</p>
+            </div>
+          </div>
+          <div style="background:rgba(88,166,255,.07);border:1px solid rgba(88,166,255,.2);border-radius:6px;padding:12px 14px;margin-top:8px;font-size:11px;color:#7db8f7;line-height:1.7;">
+            <strong>Need to make changes to the app itself?</strong><br>
+            See the separate <em>Dashboard Update Guide</em> PDF for step-by-step instructions on editing the code and pushing updates to GitHub Pages.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- IMPORT PANEL -->
   <div class="import-panel">
-    <h2>📂 Data Import</h2>
+    <h2>📂 Step 1 — Data Import</h2>
     <p class="import-panel-sub">Upload one combined Paycom export + separate QuickBooks exports per company. Accepts .xlsx, .xls, or .csv.</p>
 
     <div class="info-box blue">
@@ -164,7 +274,7 @@
       ✅ <strong>Job Code Map built-in:</strong>
       345 Trace QBO locations are pre-mapped to Paycom codes. All 302 existing codes are mapped, plus 43 new codes (1258–1300) assigned for jobs with no prior Paycom code.
       CC&amp;E Paycom codes (e.g. <code>1007</code>) match QBO project names automatically.
-      You can upload a custom CSV to override any mappings.
+      You can upload a custom CSV override in Step 2 below.
     </div>
 
     <div class="import-grid">
@@ -191,23 +301,33 @@
         <div class="import-icon">📊</div>
         <div class="import-label">QuickBooks — CC&E</div>
         <div class="import-company ccande">CC&E LLC</div>
-        <div class="import-hint" style="color:#4CAF50;font-weight:bold">✓ Pre-loaded: CC&E data as of Feb 23, 2026</div><div class="import-hint">Upload new file to refresh</div>
+        <div class="import-hint">Project Costs Detail report (.xls/.csv)<br>Upload each month to refresh</div>
         <div class="import-status" id="status-qbo-ccande"></div>
       </div>
     </div>
 
-    <!-- JOB MAP UPLOAD (shown after first Trace import) -->
-    <div id="jobmap-section" style="display:none;margin-top:14px;padding-top:14px;border-top:1px solid var(--border);">
-      <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
-        <div style="flex:1;min-width:200px;">
-          <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:12px;letter-spacing:1px;text-transform:uppercase;color:var(--yellow);margin-bottom:4px;">🗺️ Trace Job Code Map (Optional)</div>
-          <div style="color:var(--muted);font-size:11px;">Download the template, fill in QBO Location → Paycom Code mappings, then re-upload.</div>
-        </div>
-        <button class="btn secondary" style="font-size:12px;padding:6px 12px;" onclick="downloadJobMapTemplate()">⬇ Download Template</button>
-        <div class="import-zone" style="flex:0 0 200px;padding:10px;" id="zone-jobmap" ondragover="dragOver(event,'zone-jobmap')" ondragleave="dragLeave('zone-jobmap')" ondrop="dropFile(event,'jobmap')">
+    <!-- JOB CODE MAP — NOW ALWAYS VISIBLE AS STEP 2 -->
+    <div class="jobmap-panel" style="margin-top:20px;">
+      <div class="jobmap-panel-title">🗺️ Step 2 — Job Code Map (Optional but Recommended)</div>
+      <div class="jobmap-panel-sub">
+        The dashboard has <strong>345 job codes pre-loaded</strong> — most jobs will match automatically. However, new jobs added in QuickBooks after the last update won't have a Paycom code yet, so their labor costs won't link to a job.<br><br>
+        <strong>To fix this:</strong> Download the template below, open it in Excel, fill in the <em>QBO Location</em> and <em>Paycom Code</em> columns for any new jobs, save as <code>.csv</code>, and upload it here. You only need to do this when new jobs appear.
+      </div>
+      <div class="jobmap-actions">
+        <button class="btn secondary" style="font-size:12px;padding:8px 16px;" onclick="downloadJobMapTemplate()">⬇ Download Job Code Template (.csv)</button>
+        <div class="jobmap-upload-zone" id="zone-jobmap" ondragover="dragOver(event,'zone-jobmap')" ondragleave="dragLeave('zone-jobmap')" ondrop="dropFile(event,'jobmap')">
           <input type="file" accept=".csv" onchange="loadFile(this,'jobmap')">
-          <div style="font-size:12px;color:var(--muted)">⬆ Upload to override built-in map (.csv)</div>
+          <div style="font-size:20px;margin-bottom:4px;">⬆</div>
+          <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:12px;letter-spacing:1px;text-transform:uppercase;color:var(--green);">Upload Override Map</div>
+          <div style="font-size:10px;color:var(--muted);margin-top:3px;">.csv format only</div>
           <div class="import-status" id="status-jobmap"></div>
+        </div>
+        <div style="flex:1;min-width:180px;">
+          <div style="font-size:11px;color:var(--muted);line-height:1.7;">
+            <strong style="color:var(--text);">CSV format required:</strong><br>
+            Two columns — <code>qbo_location</code> and <code>paycom_code</code><br>
+            Must match the job name exactly as it appears in QuickBooks.
+          </div>
         </div>
       </div>
     </div>
@@ -289,6 +409,16 @@
 // ═══════════════════════════════════════════════════════════
 const PAYCOM_TRACE_ID  = 'TRACE LLC';
 const PAYCOM_CCANDE_ID = 'COMMUNICATION CONSTRUCTION & ENGINEERING LLC';
+
+// ═══════════════════════════════════════════════════════════
+// HELP PANEL TOGGLE
+// ═══════════════════════════════════════════════════════════
+function toggleHelp(){
+  const body=document.getElementById('help-body');
+  const chev=document.getElementById('help-chevron');
+  if(body.classList.contains('open')){body.classList.remove('open');chev.textContent='▼';}
+  else{body.classList.add('open');chev.textContent='▲';}
+}
 
 // ═══════════════════════════════════════════════════════════
 // BUILT-IN JOB CODE MAP (Trace QBO Location → Paycom Code)
@@ -644,7 +774,6 @@ const BUILTIN_JOB_MAP = {
 // ═══════════════════════════════════════════════════════════
 // BAKED DATA — CC&E jobs pre-loaded (as of Feb 23, 2026)
 // ═══════════════════════════════════════════════════════════
-const BAKED_CCANDE = [{"id": "0005", "company": "ccande", "name": "adams 12 fiber locates 0005", "customer": "", "revenue": 0.0, "qboActCost": 228.05, "materials": 0, "subs": 0, "overhead": 228.05, "labor": 0, "laborHours": 0, "employees": [], "hasInvoice": false, "totalCost": 228.05, "profit": -228.05, "margin": 0}, {"id": "0001", "company": "ccande", "name": "adams county fiber locates 0001", "customer": "", "revenue": 3430.0, "qboActCost": 250.0, "materials": 0, "subs": 0, "overhead": 250.0, "labor": 0, "laborHours": 0, "employees": [], "hasInvoice": true, "totalCost": 250.0, "profit": 3180.0, "margin": 92.71}, {"id": "0004", "company": "ccande", "name": "adcom fiber locates 0004", "customer": "", "revenue": 1200.0, "qboActCost": 0.0, "materials": 0, "subs": 0, "overhead": 0.0, "labor": 0, "laborHours": 0, "employees": [], "hasInvoice": true, "totalCost": 0.0, "profit": 1200.0, "margin": 100.0}, {"id": "1186", "company": "ccande", "name": "martin 100 e 2nd ave 1186", "customer": "", "revenue": 2500.0, "qboActCost": 30.5, "materials": 0, "subs": 0, "overhead": 0, "labor": 592.75, "laborHours": 16.42, "employees": [{"name": "HASENBALG, NICHOLAS D", "hours": 7.8, "amount": 334.15, "rate": 42.84}, {"name": "DILLARD, JEREMIAH W", "hours": 8.62, "amount": 258.6, "rate": 30.0}], "hasInvoice": true, "totalCost": 592.75, "profit": 1907.25, "margin": 76.29}, {"id": "1105", "company": "ccande", "name": "4 benchmark dr 1105", "customer": "", "revenue": 11045.84, "qboActCost": 0.0, "materials": 0, "subs": 0, "overhead": 0.0, "labor": 1282.65, "laborHours": 33.01, "employees": [{"name": "JARAMILLO, GERARDO R", "hours": 21.48, "amount": 902.16, "rate": 42.0}, {"name": "MIRANDA-QUINTANA, MARIO", "hours": 11.53, "amount": 380.49, "rate": 33.0}], "hasInvoice": true, "totalCost": 1282.65, "profit": 9763.19, "margin": 88.39}, {"id": "1203", "company": "ccande", "name": "aspen creek ph 1fault damage 1203", "customer": "", "revenue": 7853.55, "qboActCost": 409.57, "materials": 0, "subs": 0, "overhead": 409.57, "labor": 0, "laborHours": 0, "employees": [], "hasInvoice": true, "totalCost": 409.57, "profit": 7443.98, "margin": 94.78}, {"id": "1037", "company": "ccande", "name": "aspen creek phase 2 site lighting 1037", "customer": "", "revenue": 0.0, "qboActCost": 27566.04, "materials": 0, "subs": 0, "overhead": 27566.04, "labor": 0, "laborHours": 0, "employees": [], "hasInvoice": false, "totalCost": 27566.04, "profit": -27566.04, "margin": 0}, {"id": "1173", "company": "ccande", "name": "water tower fiber 1173", "customer": "", "revenue": 6135.81, "qboActCost": 900.19, "materials": 0, "subs": 0, "overhead": 358.39, "labor": 541.8, "laborHours": 12.82, "employees": [{"name": "HASENBALG, NICHOLAS D", "hours": 6.85, "amount": 293.45, "rate": 42.84}, {"name": "ARAUJO, ROBERT L", "hours": 5.97, "amount": 248.35, "rate": 41.6}], "hasInvoice": true, "totalCost": 900.19, "profit": 5235.62, "margin": 85.33}, {"id": "1086", "company": "ccande", "name": "ccsd ecs building 1086", "customer": "", "revenue": 0.0, "qboActCost": 339.98, "materials": 0, "subs": 0, "overhead": 339.98, "labor": 0, "laborHours": 0, "employees": [], "hasInvoice": false, "totalCost": 339.98, "profit": -339.98, "margin": 0}, {"id": "1056", "company": "ccande", "name": "ccsd transportation center 1056", "customer": "", "revenue": 0.0, "qboActCost": 88.7, "materials": 0, "subs": 0, "overhead": 88.7, "labor": 0, "laborHours": 0, "employees": [], "hasInvoice": false, "totalCost": 88.7, "profit": -88.7, "margin": 0}, {"id": "0050", "company": "ccande", "name": "chevron t e 0050", "customer": "", "revenue": 13285.0, "qboActCost": 3765.59, "materials": 0, "subs": 0, "overhead": 2543.38, "labor": 1222.21, "laborHours": 29.38, "employees": [{"name": "ARAUJO, ROBERT L", "hours": 29.38, "amount": 1222.21, "rate": 41.6}], "hasInvoice": true, "totalCost": 3765.59, "profit": 9519.41, "margin": 71.66}, {"id": "1079", "company": "ccande", "name": "5 benchmark dr 1079", "customer": "", "revenue": 9666.2, "qboActCost": 4332.91, "materials": 0, "subs": 0, "overhead": 4332.91, "labor": 0, "laborHours": 0, "employees": [], "hasInvoice": true, "totalCost": 4332.91, "profit": 5333.29, "margin": 55.17}, {"id": "0002", "company": "ccande", "name": "brighton fiber locates 0002", "customer": "", "revenue": 4410.0, "qboActCost": 250.0, "materials": 0, "subs": 0, "overhead": 250.0, "labor": 0, "laborHours": 0, "employees": [], "hasInvoice": true, "totalCost": 250.0, "profit": 4160.0, "margin": 94.33}, {"id": "1257", "company": "ccande", "name": "brighton rec center mm terms 1257", "customer": "", "revenue": 1630.0, "qboActCost": 0.0, "materials": 0, "subs": 0, "overhead": 0.0, "labor": 0, "laborHours": 0, "employees": [], "hasInvoice": true, "totalCost": 0.0, "profit": 1630.0, "margin": 100.0}, {"id": "1046", "company": "ccande", "name": "fire training lat 1046", "customer": "", "revenue": 593.9, "qboActCost": 0.0, "materials": 0, "subs": 0, "overhead": 0.0, "labor": 0, "laborHours": 0, "employees": [], "hasInvoice": true, "totalCost": 0.0, "profit": 593.9, "margin": 100.0}, {"id": "1161", "company": "ccande", "name": "pump fiber 168th 7th 1161", "customer": "", "revenue": 1725.0, "qboActCost": 0.0, "materials": 0, "subs": 0, "overhead": 0.0, "labor": 354.02, "laborHours": 8.51, "employees": [{"name": "ARAUJO, ROBERT L", "hours": 8.51, "amount": 354.02, "rate": 41.6}], "hasInvoice": true, "totalCost": 354.02, "profit": 1370.98, "margin": 79.48}, {"id": "0003", "company": "ccande", "name": "cogent fiber locates 0003", "customer": "", "revenue": 7312.5, "qboActCost": 0.0, "materials": 0, "subs": 0, "overhead": 0.0, "labor": 0, "laborHours": 0, "employees": [], "hasInvoice": true, "totalCost": 0.0, "profit": 7312.5, "margin": 100.0}, {"id": "1081", "company": "ccande", "name": "fountain valley school 1081", "customer": "", "revenue": 0.0, "qboActCost": 3442.79, "materials": 0, "subs": 0, "overhead": 3442.79, "labor": 0, "laborHours": 0, "employees": [], "hasInvoice": false, "totalCost": 3442.79, "profit": -3442.79, "margin": 0}, {"id": "1020", "company": "ccande", "name": "griffith station 1020", "customer": "", "revenue": 45457.5, "qboActCost": 6521.89, "materials": 0, "subs": 0, "overhead": 3487.74, "labor": 3034.15, "laborHours": 79.71, "employees": [{"name": "MIRANDA-QUINTANA, MARIO", "hours": 28.78, "amount": 961.46, "rate": 33.41}, {"name": "GANDARILLA ORTIZ, BRAYAN", "hours": 10.62, "amount": 477.9, "rate": 45.0}, {"name": "HASENBALG, NICHOLAS D", "hours": 10.15, "amount": 461.17, "rate": 45.44}, {"name": "JARAMILLO, GERARDO R", "hours": 10.53, "amount": 442.26, "rate": 42.0}, {"name": "ARAUJO, ROBERT L", "hours": 9.69, "amount": 403.1, "rate": 41.6}, {"name": "LUNA, DAVID", "hours": 9.94, "amount": 288.26, "rate": 29.0}], "hasInvoice": true, "totalCost": 6521.89, "profit": 38935.61, "margin": 85.65}, {"id": "1066", "company": "ccande", "name": "pp town center tract i irrigation meter 1066", "customer": "", "revenue": 0.0, "qboActCost": 38.52, "materials": 0, "subs": 0, "overhead": 38.52, "labor": 0, "laborHours": 0, "employees": [], "hasInvoice": false, "totalCost": 38.52, "profit": -38.52, "margin": 0}, {"id": "1065", "company": "ccande", "name": "painted prairie phase 8 irrigation meters 1065", "customer": "", "revenue": 0.0, "qboActCost": -5542.77, "materials": 0, "subs": 0, "overhead": -5542.77, "labor": 0, "laborHours": 0, "employees": [], "hasInvoice": false, "totalCost": -5542.77, "profit": 5542.77, "margin": 0}, {"id": "1007", "company": "ccande", "name": "metro center light poles 1007", "customer": "", "revenue": 8674.0, "qboActCost": 3835.42, "materials": 0, "subs": 0, "overhead": 3504.82, "labor": 330.6, "laborHours": 11.02, "employees": [{"name": "DILLARD, JEREMIAH W", "hours": 11.02, "amount": 330.6, "rate": 30.0}], "hasInvoice": true, "totalCost": 3835.42, "profit": 4838.58, "margin": 55.78}, {"id": "1101", "company": "ccande", "name": "uch highlands ranch 1101", "customer": "", "revenue": 11423.31, "qboActCost": 4529.73, "materials": 0, "subs": 0, "overhead": 4529.73, "labor": 0, "laborHours": 0, "employees": [], "hasInvoice": true, "totalCost": 4529.73, "profit": 6893.58, "margin": 60.35}, {"id": "1160", "company": "ccande", "name": "lowry fiber terms 1160", "customer": "", "revenue": 2604.0, "qboActCost": 1697.05, "materials": 0, "subs": 0, "overhead": 702.09, "labor": 994.96, "laborHours": 23.33, "employees": [{"name": "HASENBALG, NICHOLAS D", "hours": 19.7, "amount": 843.95, "rate": 42.84}, {"name": "ARAUJO, ROBERT L", "hours": 3.63, "amount": 151.01, "rate": 41.6}], "hasInvoice": true, "totalCost": 1697.05, "profit": 906.95, "margin": 34.83}, {"id": "1183", "company": "ccande", "name": "two sams clubs elpaso tx 1183", "customer": "", "revenue": 23030.0, "qboActCost": 6543.73, "materials": 0, "subs": 0, "overhead": 0, "labor": 6855.15, "laborHours": 149.72, "employees": [{"name": "GANDARILLA ORTIZ, BRAYAN", "hours": 75.93, "amount": 4225.28, "rate": 55.65}, {"name": "LUNA, DAVID", "hours": 73.79, "amount": 2629.87, "rate": 35.64}], "hasInvoice": true, "totalCost": 6855.15, "profit": 16174.85, "margin": 70.23}, {"id": "1223", "company": "ccande", "name": "walmart 1492 bollard repair 1223", "customer": "", "revenue": 4574.75, "qboActCost": 1025.8, "materials": 0, "subs": 0, "overhead": 1025.8, "labor": 0, "laborHours": 0, "employees": [], "hasInvoice": true, "totalCost": 1025.8, "profit": 3548.95, "margin": 77.58}, {"id": "1111", "company": "ccande", "name": "walmart 921 salida co 1111", "customer": "", "revenue": 10763.6, "qboActCost": 446.74, "materials": 0, "subs": 0, "overhead": 446.74, "labor": 0, "laborHours": 0, "employees": [], "hasInvoice": true, "totalCost": 446.74, "profit": 10316.86, "margin": 95.85}, {"id": "1189", "company": "ccande", "name": "walmart castlerock 1189", "customer": "", "revenue": 5583.9, "qboActCost": 11.09, "materials": 0, "subs": 0, "overhead": 0, "labor": 705.96, "laborHours": 19.08, "employees": [{"name": "JARAMILLO, GERARDO R", "hours": 9.5, "amount": 406.56, "rate": 42.8}, {"name": "DILLARD, JEREMIAH W", "hours": 9.58, "amount": 299.4, "rate": 31.25}], "hasInvoice": true, "totalCost": 705.96, "profit": 4877.94, "margin": 87.36}, {"id": "1227", "company": "ccande", "name": "walmart 4491 grand junction 1227", "customer": "", "revenue": 10177.7, "qboActCost": 528.97, "materials": 0, "subs": 0, "overhead": 528.97, "labor": 0, "laborHours": 0, "employees": [], "hasInvoice": true, "totalCost": 528.97, "profit": 9648.73, "margin": 94.8}, {"id": "1047", "company": "ccande", "name": "fe warren gbsd osp project 1047", "customer": "", "revenue": 0.0, "qboActCost": 2385.38, "materials": 0, "subs": 0, "overhead": 2385.38, "labor": 0, "laborHours": 0, "employees": [], "hasInvoice": false, "totalCost": 2385.38, "profit": -2385.38, "margin": 0}, {"id": "1202", "company": "ccande", "name": "safehouse denver 1649 n downing st 1202", "customer": "", "revenue": 1732.19, "qboActCost": 0.0, "materials": 0, "subs": 0, "overhead": 0.0, "labor": 0, "laborHours": 0, "employees": [], "hasInvoice": true, "totalCost": 0.0, "profit": 1732.19, "margin": 100.0}, {"id": "1188", "company": "ccande", "name": "the spice guy 1150 w 5th ave 1188", "customer": "", "revenue": 5165.0, "qboActCost": 0.0, "materials": 0, "subs": 0, "overhead": 0.0, "labor": 0, "laborHours": 0, "employees": [], "hasInvoice": true, "totalCost": 0.0, "profit": 5165.0, "margin": 100.0}, {"id": "1148", "company": "ccande", "name": "1350 logan st pole move 1148", "customer": "", "revenue": 600.0, "qboActCost": 0.0, "materials": 0, "subs": 0, "overhead": 0.0, "labor": 0, "laborHours": 0, "employees": [], "hasInvoice": true, "totalCost": 0.0, "profit": 600.0, "margin": 100.0}, {"id": "1025", "company": "ccande", "name": "englewood servicenter 1025", "customer": "", "revenue": 0.0, "qboActCost": 274.05, "materials": 0, "subs": 0, "overhead": 274.05, "labor": 0, "laborHours": 0, "employees": [], "hasInvoice": false, "totalCost": 274.05, "profit": -274.05, "margin": 0}, {"id": "1104", "company": "ccande", "name": "pickleshot trenching and poles 1104", "customer": "", "revenue": 0.0, "qboActCost": 36.54, "materials": 0, "subs": 0, "overhead": 0, "labor": 1206.99, "laborHours": 33.47, "employees": [{"name": "HASENBALG, NICHOLAS D", "hours": 13.5, "amount": 578.34, "rate": 42.84}, {"name": "MIRANDA-QUINTANA, MARIO", "hours": 9.85, "amount": 325.05, "rate": 33.0}, {"name": "DILLARD, JEREMIAH W", "hours": 10.12, "amount": 303.6, "rate": 30.0}], "hasInvoice": false, "totalCost": 1206.99, "profit": -1206.99, "margin": 0}, {"id": "1169", "company": "ccande", "name": "raising canes 7405 e hampden ave 1169", "customer": "", "revenue": 4732.2, "qboActCost": 0.0, "materials": 0, "subs": 0, "overhead": 0.0, "labor": 710.1, "laborHours": 19.89, "employees": [{"name": "JARAMILLO, GERARDO R", "hours": 9.38, "amount": 393.96, "rate": 42.0}, {"name": "DILLARD, JEREMIAH W", "hours": 10.23, "amount": 306.9, "rate": 30.0}, {"name": "MIRANDA-QUINTANA, MARIO", "hours": 0.28, "amount": 9.24, "rate": 33.0}], "hasInvoice": true, "totalCost": 710.1, "profit": 4022.1, "margin": 84.99}, {"id": "1088", "company": "ccande", "name": "ccd fiber copper hot swap 1088", "customer": "", "revenue": 0.0, "qboActCost": 1404.06, "materials": 0, "subs": 0, "overhead": 1404.06, "labor": 0, "laborHours": 0, "employees": [], "hasInvoice": false, "totalCost": 1404.06, "profit": -1404.06, "margin": 0}, {"id": "1023", "company": "ccande", "name": "150 w 53rd pl sign 1023", "customer": "", "revenue": 4147.78, "qboActCost": 51.92, "materials": 0, "subs": 0, "overhead": 0, "labor": 541.65, "laborHours": 12.47, "employees": [{"name": "JARAMILLO, GERARDO R", "hours": 6.5, "amount": 273.0, "rate": 42.0}, {"name": "GANDARILLA ORTIZ, BRAYAN", "hours": 5.97, "amount": 268.65, "rate": 45.0}], "hasInvoice": true, "totalCost": 541.65, "profit": 3606.13, "margin": 86.94}, {"id": "1042", "company": "ccande", "name": "pp himalaya rd e 60th ave street lighting 1042", "customer": "", "revenue": 26217.0, "qboActCost": 134084.02, "materials": 0, "subs": 0, "overhead": 134084.02, "labor": 0, "laborHours": 0, "employees": [], "hasInvoice": true, "totalCost": 134084.02, "profit": -107867.02, "margin": -411.44}, {"id": "1039", "company": "ccande", "name": "painted prairie multi family flg 5 street lighting 1039", "customer": "", "revenue": 20778.5, "qboActCost": 2167.59, "materials": 0, "subs": 0, "overhead": 2167.59, "labor": 0, "laborHours": 0, "employees": [], "hasInvoice": true, "totalCost": 2167.59, "profit": 18610.91, "margin": 89.57}, {"id": "1041", "company": "ccande", "name": "painted prairie phase 8 street lighting 1041", "customer": "", "revenue": 0.0, "qboActCost": 40.89, "materials": 0, "subs": 0, "overhead": 40.89, "labor": 0, "laborHours": 0, "employees": [], "hasInvoice": false, "totalCost": 40.89, "profit": -40.89, "margin": 0}, {"id": "1156", "company": "ccande", "name": "evergreen industrial ft collins 1156", "customer": "", "revenue": 10072.53, "qboActCost": 0.0, "materials": 0, "subs": 0, "overhead": 0.0, "labor": 0, "laborHours": 0, "employees": [], "hasInvoice": true, "totalCost": 0.0, "profit": 10072.53, "margin": 100.0}, {"id": "1206", "company": "ccande", "name": "aurora schools bus office 160 n airport rd 1206", "customer": "", "revenue": 5351.35, "qboActCost": 0.0, "materials": 0, "subs": 0, "overhead": 0.0, "labor": 1122.66, "laborHours": 25.93, "employees": [{"name": "GANDARILLA ORTIZ, BRAYAN", "hours": 8.88, "amount": 399.6, "rate": 45.0}, {"name": "JARAMILLO, GERARDO R", "hours": 8.77, "amount": 368.34, "rate": 42.0}, {"name": "HASENBALG, NICHOLAS D", "hours": 8.28, "amount": 354.72, "rate": 42.84}], "hasInvoice": true, "totalCost": 1122.66, "profit": 4228.69, "margin": 79.02}, {"id": "1210", "company": "ccande", "name": "heathers gardens troubleshoot 1210", "customer": "", "revenue": 520.0, "qboActCost": 0.0, "materials": 0, "subs": 0, "overhead": 0.0, "labor": 0, "laborHours": 0, "employees": [], "hasInvoice": true, "totalCost": 0.0, "profit": 520.0, "margin": 100.0}, {"id": "1040", "company": "ccande", "name": "chambers rd median lighting 1040", "customer": "", "revenue": 0.0, "qboActCost": -8114.19, "materials": 0, "subs": 0, "overhead": -8114.19, "labor": 0, "laborHours": 0, "employees": [], "hasInvoice": false, "totalCost": -8114.19, "profit": 8114.19, "margin": 0}, {"id": "1103", "company": "ccande", "name": "6304 n jackson gap st meter refeed 1103", "customer": "", "revenue": 12975.13, "qboActCost": 0.0, "materials": 0, "subs": 0, "overhead": 0.0, "labor": 447.3, "laborHours": 10.65, "employees": [{"name": "JARAMILLO, GERARDO R", "hours": 10.65, "amount": 447.3, "rate": 42.0}], "hasInvoice": true, "totalCost": 447.3, "profit": 12527.83, "margin": 96.55}, {"id": "1038", "company": "ccande", "name": "porteos pa 9a 9c street lighting 1038", "customer": "", "revenue": 64529.41, "qboActCost": 25470.17, "materials": 0, "subs": 0, "overhead": 24781.6, "labor": 688.57, "laborHours": 19.28, "employees": [{"name": "HASENBALG, NICHOLAS D", "hours": 8.58, "amount": 367.57, "rate": 42.84}, {"name": "DILLARD, JEREMIAH W", "hours": 10.7, "amount": 321.0, "rate": 30.0}], "hasInvoice": true, "totalCost": 25470.17, "profit": 39059.24, "margin": 60.53}, {"id": "Shop", "company": "ccande", "name": "CCE Shop", "customer": "", "revenue": 0, "qboActCost": 0, "materials": 0, "subs": 0, "overhead": 0, "labor": 21.0, "laborHours": 0.5, "employees": [{"name": "JARAMILLO, GERARDO R", "hours": 0.5, "amount": 21.0, "rate": 42.0}], "hasInvoice": false, "totalCost": 21.0, "profit": -21.0, "margin": 0}, {"id": "1195", "company": "ccande", "name": "Habitat for Humanity-Griffith Station C/O 1020", "customer": "", "revenue": 0, "qboActCost": 0, "materials": 0, "subs": 0, "overhead": 0, "labor": 287.4, "laborHours": 9.58, "employees": [{"name": "DILLARD, JEREMIAH W", "hours": 9.58, "amount": 287.4, "rate": 30.0}], "hasInvoice": false, "totalCost": 287.4, "profit": -287.4, "margin": 0}, {"id": "TRCFLT", "company": "ccande", "name": "Trace Fleet", "customer": "", "revenue": 0, "qboActCost": 0, "materials": 0, "subs": 0, "overhead": 0, "labor": 1050.76, "laborHours": 16.17, "employees": [{"name": "JARAMILLO, GERARDO R", "hours": 8.72, "amount": 542.01, "rate": 62.16}, {"name": "MASCORRO, MARTIN", "hours": 7.45, "amount": 508.75, "rate": 68.29}], "hasInvoice": false, "totalCost": 1050.76, "profit": -1050.76, "margin": 0}, {"id": "1038A", "company": "ccande", "name": "Velocity Metro District- Porteos PA-9A", "customer": "", "revenue": 0, "qboActCost": 0, "materials": 0, "subs": 0, "overhead": 0, "labor": 783.2, "laborHours": 21.12, "employees": [{"name": "GANDARILLA ORTIZ, BRAYAN", "hours": 10.67, "amount": 480.15, "rate": 45.0}, {"name": "LUNA, DAVID", "hours": 10.45, "amount": 303.05, "rate": 29.0}], "hasInvoice": false, "totalCost": 783.2, "profit": -783.2, "margin": 0}, {"id": "1075", "company": "ccande", "name": "Velocity Metro District-Porteos PA-9A C/O# 1038", "customer": "", "revenue": 0, "qboActCost": 0, "materials": 0, "subs": 0, "overhead": 0, "labor": 745.27, "laborHours": 17.51, "employees": [{"name": "THIELBERT, NORM D", "hours": 7.28, "amount": 407.68, "rate": 56.0}, {"name": "MIRANDA-QUINTANA, MARIO", "hours": 10.23, "amount": 337.59, "rate": 33.0}], "hasInvoice": false, "totalCost": 745.27, "profit": -745.27, "margin": 0}];
 
 // ═══════════════════════════════════════════════════════════
 // STATE
@@ -748,10 +877,12 @@ function readXLSX(file,src){
         if(data.length<2){setStatus(src,'err','✗ Empty file');return;}
         // Find header row by keyword matching, not just non-empty cell count
         // (avoids QBO report-title rows that have many populated cells)
-        const HKEYS=['date','type','amount','location','project','vendor','distribution','ee name','hours'];
+        const HKEYS=['date','type','amount','location','project','vendor','distribution','ee name','hours','qbo_location','paycom_code'];
         let headerIdx=0;
         for(let i=0;i<Math.min(8,data.length);i++){
           const rowStr=data[i].map(v=>String(v||'').toLowerCase()).join(' ');
+          // Strong single-field match for job map
+          if(rowStr.includes('qbo_location')||rowStr.includes('paycom_code')){headerIdx=i;break;}
           const hits=HKEYS.filter(k=>rowStr.includes(k)).length;
           if(hits>=2){headerIdx=i;break;}
         }
@@ -773,17 +904,21 @@ function readXLSX(file,src){
 
 function normH(h){return h.trim().toLowerCase().replace(/[^a-z0-9]+/g,'_').replace(/^_|_$/g,'');}
 function parseCSVText(text){
-  const lines=text.trim().split(/\r?\n/);
-  // Find header row: prefer a row containing known header keywords
-  // over simply counting commas (avoids QBO filter-description rows)
-  const HEADER_KEYWORDS=['date','type','amount','location','project','vendor','distribution'];
+  // Strip BOM if present
+  const clean=text.replace(/^\uFEFF/,'').trim();
+  const lines=clean.split(/\r?\n/);
+  // Find header row: look for known header keywords across all file types
+  // including job map format (qbo_location, paycom_code)
+  const HEADER_KEYWORDS=['date','type','amount','location','project','vendor','distribution','qbo_location','paycom_code','qbo_loc'];
   let headerIdx=0;
   for(let i=0;i<Math.min(8,lines.length);i++){
     const lower=lines[i].toLowerCase();
+    // Single strong match on job map headers is enough
+    if(lower.includes('qbo_location')||lower.includes('paycom_code')){headerIdx=i;break;}
     const hits=HEADER_KEYWORDS.filter(k=>lower.includes(k)).length;
     if(hits>=2){headerIdx=i;break;}
   }
-  const headers=splitCSV(lines[headerIdx]).map(h=>normH(h.replace(/^"|"$/g,'')));
+  const headers=splitCSV(lines[headerIdx]).map(h=>normH(h.replace(/^"|"$/g,'').replace(/^\uFEFF/,'')));
   return lines.slice(headerIdx+1).filter(l=>l.trim()).map(line=>{
     const vals=splitCSV(line),obj={};
     headers.forEach((h,i)=>{obj[h]=(vals[i]||'').trim().replace(/^"|"$/g,'');});
@@ -827,9 +962,19 @@ function handleRows(rows,src,filename){
 function parseJobMap(rows){
   let count=0;
   rows.forEach(r=>{
-    const loc  =(r.qbo_location||r.location||'').trim();
-    const code =(r.paycom_code||r.code||'').trim();
-    if(loc&&code){traceJobMap[loc]=code;count++;}
+    // Normalize keys: lowercase, trim, strip BOM characters
+    const norm={};
+    Object.keys(r).forEach(k=>{
+      const nk=k.replace(/^﻿/,'').toLowerCase().trim().replace(/\s+/g,'_');
+      norm[nk]=(r[k]||'').toString().trim();
+    });
+    const loc  = norm.qbo_location || norm.location || norm.qbo_loc || '';
+    const code = norm.paycom_code  || norm.code      || norm.paycom  || '';
+    if(loc && code && loc!=='qbo_location' && code!=='paycom_code'){
+      traceJobMap[loc]=code;
+      // Also map for CC&E — paycom code is the job number, so store both directions
+      count++;
+    }
   });
   setStatus('jobmap','ok',`✓ ${count} mappings loaded`);
   mergeData();
@@ -896,15 +1041,6 @@ function downloadJobMapTemplate(){
 // ═══════════════════════════════════════════════════════════
 function mergeData(){
   jobsByCompany={trace:{},ccande:{}};
-
-  // ── Pre-seed CC&E from baked data if no live QBO file uploaded ──
-  if(!rawQBO.ccande){
-    BAKED_CCANDE.forEach(j=>{
-      jobsByCompany.ccande[j.id]=Object.assign({},j,{
-        employees: j.employees.reduce((acc,e)=>{acc[e.name]=Object.assign({},e);return acc;},{})
-      });
-    });
-  }
 
   // ── TRACE QBO ──
   if(rawQBO.trace){
